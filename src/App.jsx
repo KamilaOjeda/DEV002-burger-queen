@@ -3,29 +3,47 @@ import { Routes, Route } from 'react-router-dom';
 import { Inicio } from '/src/pages/Inicio';
 import { Login } from '/src/pages/Login';
 import { Menu } from '/src/pages/Menu';
-import { Orders } from '/src/pages/Orders.jsx';
+import { AllOrders } from '/src/pages/AllOrders.jsx';
 import { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '/src/firebase/firebase-init.js';
+import { addOrder, onGetOrders } from './firestore/firestore-funct';
 
 const App = () => {
 	const [user, setUser] = useState(null);
+	const [userEmail, setUserEmail] = useState('');
+	const [listProducts, setListProducts] = useState([]);
+	const [orders, setOrders] = useState([]);
+
 	console.log('User: ' + user);
 	//Ejecuta algo ni bien carga el componente
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-			console.log('currentUser: ' + { currentUser });
-			setUser(currentUser);
-			// setLoading(false);;
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+			console.log('currentUser: ' + { user });
+			if (user) {
+				setUser(true);
+				setUserEmail(user.email);
+				localStorage.setItem('employee', user.email);
+			}
 		});
 		return () => {
 			unsubscribe();
 		};
 	}, []);
 
-	//const logOut = () => setUser(null);
+useEffect(() => {
+	const unsubscribe = onGetOrders((query) => {
+		const newOrders = query.docs.map((doc) => ({
+			id: doc.id,
+			...doc.data(),
+		}));
+		setOrders(newOrders);
+	});
+	return () => {
+		unsubscribe();
+	};
+}, []);
 
-	console.log('User: ' + user);
 	if (user === null) {
 		return (
 			<Routes>
@@ -38,8 +56,20 @@ const App = () => {
 
 	return (
 		<Routes>
-			<Route path='/menu' element={<Menu user={user} />} />
-			<Route path='/orders' element={<Orders user={user} />} />
+			<Route
+				path='/menu'
+				element={<Menu userEmail={userEmail} addOrder={addOrder} listProducts={listProducts} setListProducts={setListProducts}/>}
+			/>
+			<Route
+				path='/orders'
+				element={
+					<AllOrders
+						userEmail={userEmail}
+						orders={orders}
+						listProducts={listProducts}
+					/>
+				}
+			/>
 		</Routes>
 	);
 };

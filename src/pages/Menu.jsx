@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { NavBar } from '../components/NavBar';
-import { Header } from '../components/Header';
-import data from '../data.json/';
-import { MenuButtnProduct } from '../components/Menu/MenuButtnProduct';
-import { NewOrderContainer } from '../components/Order/NewOrderContainer.jsx';
 import { NavBarMobile } from '../components/NavBarMobile';
+import { Header } from '../components/Header';
+import { MenuButtnProduct } from '../components/Menu/MenuButtnProduct';
+import { NewOrderContainer } from '../components/Order/NewOrderContainer';
+import data from '../data.json/';
 
-const Menu = () => {
+const Menu = ({ userEmail, addOrder, listProducts, setListProducts }) => {
 	const [category, setCategory] = useState('picotería');
 	const [showMenu, setShowMenu] = useState(false);
 	const [showOrder, setShowOrder] = useState(false);
 	const [mapProducts] = useState(new Map());
-	const [listProducts, setListProducts] = useState([]);
+	const [client, setClient] = useState('');
 
 	const toggleMenu = () => {
 		setShowMenu(!showMenu);
@@ -21,6 +21,10 @@ const Menu = () => {
 	const toggleOrders = () => {
 		setShowOrder(!showOrder);
 		setShowMenu(false);
+	};
+
+	const selectCategory = (category) => {
+		setCategory(category);
 	};
 
 	const getListFromMap = (mapItems) => {
@@ -43,53 +47,43 @@ const Menu = () => {
 		setListProducts(getListFromMap(mapProducts));
 	};
 
-	const selectCategory = (category) => {
-		setCategory(category);
-	};
-
 	const deleteItem = (item) => {
 		console.log(item);
-		console.log(mapProductsDe);
-		// setProducts(mapProductsDe.filter((item) => item.id !== id));
-		const amount = mapProductsDe.get(item);
+		console.log(mapProducts);
+		// setProducts(mapProducts.filter((item) => item.id !== id));
+		const amount = mapProducts.get(item);
 		if (amount === 1) {
-			mapProductsDe.delete(item);
+			mapProducts.delete(item);
 		} else {
-			mapProductsDe.set(item, parseInt(amount) - 1);
+			mapProducts.set(item, parseInt(amount) - 1);
 		}
-		setListProducts(getListFromMap(mapProductsDe));
+		setListProducts(getListFromMap(mapProducts));
 	};
 
-	const totalOrder = () => {
-		return listProducts.reduce(
-			(total, item) => total + item.price * item.amount,
-			0
-		);
+	const totalOrder = listProducts.reduce(
+		(total, item) => total + item.price * item.amount,
+		0
+	);
+
+	const sendOrder = () => {
+		if (mapProducts.size === 0) {
+			alert('Por favor, seleciona algún producto a la nueva orden');
+		} else if (client === '') {
+			alert('Por favor, agrega el nombre del cliente');
+		} else {
+			setListProducts(getListFromMap(mapProducts));
+			addOrder(client, listProducts, totalOrder);
+			console.log({
+				client,
+				listProducts,
+				totalOrder,
+			});
+			mapProducts.clear();
+			setListProducts([]);
+			setClient('');
+		}
 	};
 
-	// const sendOrder = () => {
-	// 	console.log({
-	// 		client,
-	// 		mapProductsDe,
-	// 		total: totalOrder(),
-	// 	});
-	// 	setShowModal(false);
-	// 	setListProducts([]);
-	// };
-	const [showModal, setShowModal] = useState(false);
-
-	const handleClick = () => {
-		setMostrarPopup(true);
-	};
-
-	const handleClose = () => {
-		setMostrarPopup(false);
-	};
-
-	const handleEnviar = () => {
-		handleClose();
-	};
-	
 	return (
 		<div className='bg-secoundary-two w-full min-h-screen'>
 			{/* {<sideBar />} */}
@@ -103,7 +97,7 @@ const Menu = () => {
 			<main className='lg:pl-28 grid grid-cols-1 lg:grid-cols-8'>
 				<div className='lg:col-span-5 flex flex-col items-center justify-center gap-8'>
 					{/* {<Header />} */}
-					<Header selectCategory={selectCategory} />
+					<Header userEmail={userEmail} selectCategory={selectCategory} />
 					{/* {<tittle content />} */}
 					<h2 className='text-2xl text-main font-bold'>Elige los platillos</h2>
 					{/* {<button product />} */}
@@ -113,14 +107,18 @@ const Menu = () => {
 				<div className='lg:col-span-3'>
 					<NewOrderContainer
 						listProducts={listProducts}
-						setListProducts={setListProducts}
-						mapProductsDe={mapProducts}
-						getListFromMap={getListFromMap}
 						addItem={addItem}
 						deleteItem={deleteItem}
 						showOrder={showOrder}
-						setShowOrder={setShowOrder}
+						totalOrder={totalOrder}
+						sendOrder={sendOrder}
+						client={client}
+						setClient={setClient}
 					/>
+
+					{/* {showModal ? (
+					<PopUpModal tittle = 'Verifica el pedido y luego envía a cocina' listProducts = {listProducts} setListProducts={setListProducts} showModal={showModal} setShowModal={setShowModal} mapProducts={mapProducts}/>
+				) : null} */}
 				</div>
 			</main>
 		</div>

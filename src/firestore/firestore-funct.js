@@ -4,17 +4,19 @@ import {
 	ordersCollection,
 	onSnapshot,
 	q,
-} from '/src/firestore/firestore-init.js';
+} from '/src/firestore/firestore-init';
 
-export const addOrder = async (orderId, products, total) => {
-	try {
-		await addDoc(ordersCollection, {
+export const addOrder = async (client, products, total) => {
+	const newOrderContent = {
 			createdAt: serverTimestamp(),
-			orderId: orderId,
+			client: client,
 			products: products,
 			total: total,
 			status: 'Pendiente',
-		}).then(() => {
+	}
+	try {
+		await addDoc(ordersCollection, newOrderContent	
+		).then(() => {
 			alert('Orden enviada');
 		});
 	} catch (error) {
@@ -23,3 +25,5 @@ export const addOrder = async (orderId, products, total) => {
 };
 
 export const onGetOrders = (callback) => onSnapshot(q, callback);
+
+
