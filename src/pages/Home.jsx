@@ -1,26 +1,38 @@
 //import { UserAuth } from '../context/AuthContext';
-export function Home(props) {
+// import { logOut } from '/src/firebase/auth.jsx';
+import { useNavigate } from 'react-router-dom';
+import { NavBar } from '../components/NavBar';
+
+const Home = (props) => {
 	const user = props.user;
-	const logOut = props.logOut;
-	console.log(user);
-	const handleLogOut = async () => {
-		try {
-			await logOut();
-		} catch (error) {
-			console.error(error.message);
-		}
-	};
+	//const logOut = props.logOut;
+	console.log('Home user: ' + user.email);
+	const toNavigate = useNavigate();
+	// const handleLogOut = async () => {
+	// 	try {
+	// 		await logOut();
+	// 		toNavigate('/');
+	// 	} catch (error) {
+	// 		console.error(error.message);
+	// 	}
+	// };
 	return (
-		<div className='w-full max-w-xs m-auto text-black'>
-			<div className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
-				<p className='text-xl mb-4'>welcome {user.displayName || user.email}</p>
+		<div>
+			<NavBar />
+			<div className='flex flex-colum items-center justify-center'>
 				<button
-					className='bg-slate-200 hover:bg-slate-300 rounded py-2 px-4 text-black'
-					onClick={handleLogOut}
+					className='flex items-center justify-center w-40 bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-full'
 				>
-					logout
+					Ver Pedidos
+				</button>
+				<button
+					onClick={() => toNavigate('/menu')}
+					className='flex items-center justify-center w-40 bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-full'
+				>
+					Nuevo Pedido
 				</button>
 			</div>
 		</div>
 	);
-}
+};
+export { Home };
