@@ -2,21 +2,22 @@ import {
 	db,
 	addDoc,
 	serverTimestamp,
-	ordersCollection,
 	onSnapshot,
+	ordersCollection,
 	q,
 	updateDoc,
 	doc,
 } from '/src/firestore/firestore-init';
+// import dataStatus from '/src/dataStatus.json';
 
 export const addOrder = async (client, products, total) => {
 	const newOrderContent = {
-			createdAt: serverTimestamp(),
-			client: client,
-			products: products,
-			total: total,
-			status: 'Pendiente',
-	}
+		createdAt: serverTimestamp(),
+		client: client,
+		products: products,
+		total: total,
+		status: 'Pendiente',
+	};
 	try {
 		await addDoc(ordersCollection, newOrderContent	
 		).then(() => {
