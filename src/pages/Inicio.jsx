@@ -5,7 +5,7 @@ const Inicio = () => {
 		<div className='flex flex-col items-center justify-center bg-main min-h-screen'>
 			<div className='flex flex-col w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 items-center justify-center'>
 				<img
-					src='../../dist/assets/Logo-La-Ñaña-db092116.png'
+					src='src/assets/Logo-La-Ñaña.png'
 					alt='Logo La Ñaña'
 					className='flex w-96'
 				/>

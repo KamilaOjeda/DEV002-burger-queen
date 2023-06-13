@@ -44,7 +44,7 @@ export const Login = (props) => {
 					<figure className='flex items-center justify-center mb-4'>
 						<img
 							className='w-2/3'
-							src='../../dist/assets/Logo-La-Ñaña-db092116.png'
+							src='src/assets/Logo-La-Ñaña.png'
 							alt='Imagen del logo de ñaña'></img>
 					</figure>
 
