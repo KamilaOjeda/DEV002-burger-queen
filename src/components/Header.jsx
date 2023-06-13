@@ -6,7 +6,7 @@ const Header = ({ userEmail }) => {
 	return (
 		<div className=' lg:pl-28 flex flex-row h-35 w-full items-center justify-between'>
 			<img
-				src='src/assets/Logo-3-ñaña.png'
+				src='src/assets/Nana-header.png'
 				className='flex justify-start items-center w-48 opacity-90 mt-8 ml-14'
 				alt='LogoÑaña'
 			/>
