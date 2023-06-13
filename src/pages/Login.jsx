@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signIn } from '/src/firebase/auth.js';
+import { logo } from '../assets/Logo-La-Ñaña.png';
 
 //Componente
 export const Login = (props) => {
@@ -42,10 +43,7 @@ export const Login = (props) => {
 			<form onSubmit={handleSubmit} className='flex items-center justify-center'>
 				<div className='w-1/2 p-8 rounded-3xl shadow-3xl bg-secoundary-two'>
 					<figure className='flex items-center justify-center mb-4'>
-						<img
-							className='w-2/3'
-							src='src/assets/Logo-La-Ñaña.png'
-							alt='Imagen del logo de ñaña'></img>
+						<img className='w-2/3' src={logo} alt='Imagen del logo de ñaña'></img>
 					</figure>
 
 					<label htmlFor='email' className='text-gray-700'>
