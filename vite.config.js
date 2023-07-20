@@ -5,4 +5,9 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   basename: "/lanana-restaurant/",
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      external: ["firebase/compat/app"],
+    },
+  },
 });
